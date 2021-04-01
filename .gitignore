@@ -1,0 +1,6 @@
+/Resources
+.DS_Store
+._.DS_Store
+.vscode
+*.log
+node_modules

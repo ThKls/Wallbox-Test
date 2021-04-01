@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" ng-app="MyApp">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallbox Test</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/angular.min.js"></script>
+    </head>
+
+  <body ng-controller="MyController as Ctrl">
+    <div>
+      <div class="Content">
+        <span class="Title">Wallbox Test</span>
+      </div>
+  
+      <div class="Content">
+        <div class="Box" style="float:left; width: 360px;">
+          <span class="Title">Raw Data</span>
+          <div style="white-space: pre-wrap;">{{Ctrl.All}}</div>
+        </div>
+
+        <div class="Box" style="float:left; width: 360px;">
+          <div>
+            Result: {{Ctrl.Result}}
+            <button type="button" ng-click="Ctrl.ReadAll();"
+              accesskey="a" style="float: right">
+              Get <u>A</u>ll
+            </button>  
+          </div>
+        </div>
+
+        <div class="Box" style="float:left; width: 360px;">
+          <div>
+            <button type="button"
+              ng-click="Ctrl.WriteRegister('0x05', '0x5a5a');"
+              accesskey="r" style="float: right">
+              <u>R</u>eset Box
+            </button>  
+          </div>
+        </div>
+        <div class="Box" style="float:left; width: 360px;">
+          <div>
+            Reg: <input type="text" ng-model="_Register" size="8">
+            Value: <input type="text" ng-model="_Value" size="8">
+            <button style="float: right"
+              ng-click="Ctrl.WriteRegister(_Register, _Value);">
+              Write Register
+            </button>  
+          </div>
+        </div>
+        <div class="Box" style="float:left; width: 360px;">
+          <button style="float: left; width: 10em;"
+          ng-click="Ctrl.WriteRegister('0x14', '1000');">
+          Suspend
+          </button>  
+          <button style="float: right; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '50');">
+            Stop
+          </button>  
+          <div style="clear:both"></div>
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '100');">
+            6A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '117');">
+            7A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '133');">
+            8A
+           </button>  
+           <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '150');">
+            9A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '167');">
+            10A
+           </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '183');">
+            11A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '200');">
+            12A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '217');">
+            13A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '233');">
+            14A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '250');">
+            15A
+          </button>  
+          <button style="float: left; width: 10em;"
+            ng-click="Ctrl.WriteRegister('0x14', '267');">
+            16A
+          </button>  
+        </div>
+        <div class="Box" style="float:left; width: 360px;">
+          <input type="checkbox" ng-model="Ctrl.AutoLoad" onclick="return false;">
+          Auto Load
+          <button style="float: right; width: 10em;"
+            ng-click="Ctrl.AutoLoadClear();">
+            Off
+          </button>  
+          <button style="float: right; width: 10em;"
+            ng-click="Ctrl.AutoLoadSet();">
+            On
+          </button>  
+        </div>
+      </div>
+    </div>
+  
+
+    <script>
+      angular.module('MyApp', [])
+      .controller('MyController', function($scope, $http) {
+        var This = this;
+
+        this.All = "\n\n\n";
+
+        function ReadAutoLoad() {
+          $http.get('/autoload')
+          .then(response => {
+            This.AutoLoad = (response.data == 1);
+          })
+          .catch(response => {});
+        }
+        ReadAutoLoad();
+
+        function ReadData() {
+          This.Result = "pending"
+          $http.get('/data')
+          .then(response => {
+            This.All = response.data;
+            This.Result = "OK";
+          })
+          .catch(response => {
+            This.All = "Error";
+            This.Result = "no answer";
+          });
+        }
+        ReadData();
+
+        this.ReadAll = function() {
+          ReadData();
+          ReadAutoLoad();
+        }
+
+        this.WriteRegister = function(Register, Value) {
+          This.Result = "pending"
+          $http.get("/set?register=" + Register + "&value=" + Value)
+          .then(response => {
+            This.Result = response.data;
+            //ReadData();
+          })
+          .catch(response => {
+            This.Result = "no answer";
+          });
+        }
+
+        this.AutoLoadSet = function() {
+          $http.put('/autoload');
+          ReadAutoLoad();
+        }
+        this.AutoLoadClear = function() {
+          $http.delete('/autoload');
+          ReadAutoLoad();
+        }
+      });
+    </script>
+  </body>
+</html>

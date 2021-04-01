@@ -1,0 +1,56 @@
+body {
+  }
+  
+h1 {
+  font-size: 1.5em;
+ }
+  
+h2 {
+  font-size: 1.2em;
+}
+
+.Headline {
+  margin-top: 2px;
+  margin-bottom: 2px;;
+}
+
+.Headline a {
+  border: 1px solid black;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  margin-right: 1em;
+  text-decoration: none;
+}
+
+div.Title {
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+span.Title {
+  font-size: 1.2em;
+
+}
+
+span.SubTitel {
+  font-size: 1.2em;
+}
+
+p {
+  margin: 0;
+}
+
+div.Content {
+  padding-top: 1em;
+  padding-bottom: 1em;
+  border-top: 1px solid rgb(125, 125, 136);
+  line-height: 18px;
+}
+
+div.Box {
+  padding: 5px;
+  border: 1px solid black;
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+

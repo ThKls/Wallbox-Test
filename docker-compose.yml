@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  app:
+    build: ./API
+    volumes:
+      - ./API/app:/usr/src/app
+    devices:
+      - /dev/ttyUSB0:/dev/ttyModBus
+    ports:
+      - 8085:80
+#      - 9229:9229
+    command: nodemon --inspect=0.0.0.0 server.js
+
